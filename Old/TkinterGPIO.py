@@ -1,4 +1,4 @@
-from TkinterGUI import *
+from Reference.TkinterGUI import *
 
 # initialize window
 window = create_window("KeyTrigger")
