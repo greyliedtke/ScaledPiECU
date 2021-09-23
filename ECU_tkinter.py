@@ -10,10 +10,26 @@ def standard_button(frame, text, command):
     return st_butt
 
 
+def button_grid(frame, col, row, text, command):
+    st_butt = Button(frame, text=text, command=command)
+    st_butt.config(st_format)
+    st_butt.config(background='yellow')
+    st_butt.grid(column=col, row=row)
+    return st_butt
+
+
 def standard_label(frame, text):
     st_label = Label(frame, text=text)
     st_label.config(st_format)
     st_label.pack()
+    return st_label
+
+
+def label_grid(frame, col, row, text):
+    st_label = Label(frame, text=text)
+    st_label.config(st_format)
+    # st_label.config(sticky='ns')
+    st_label.grid(column=col, row=row, sticky='ns')
     return st_label
 
 # end
