@@ -181,7 +181,7 @@ class TestWindow(tk.Tk):
         # self.n2_speed = label_grid(self, 2, 1, "N2 krpm: " + str(ecu.n2_speed))
 
         # screen refresh rate
-        self.lls.after(refresh, self.update_state())
+        self.control_label.after(refresh, self.update_state())
 
     def update_state(self):
         # function to run every xx seconds
@@ -200,7 +200,7 @@ class TestWindow(tk.Tk):
             ecu.set_state("FAULT")
 
         # update control state labels
-        self.control_button.config(text=ecu.control_button_text)
+        # self.control_button.config(text=ecu.control_button_text)
         self.control_label.config(text=ecu.state)
         self.control_time.config(text=round(ecu.state_time, 0))
 
@@ -216,15 +216,15 @@ class TestWindow(tk.Tk):
         if res_load.level != load_enc.steps:
             res_load.set_load(load_enc.steps)
 
-        self.lll.config(text=res_load.level)
+        # self.lll.config(text=res_load.level)
         self.llkw.config(text=res_load.kw_level)
         self.llenc.config(text=load_enc.steps)
-        for ll in range(len(self.load_labels)):
-            self.load_labels[ll].config(text=res_load.load_state[ll])
+        # for ll in range(len(self.load_labels)):
+        #     self.load_labels[ll].config(text=res_load.load_state[ll])
 
         # increment state time call update
         ecu.state_time += .25
-        self.lls.after(refresh, self.update_state)
+        self.control_label.after(refresh, self.update_state)
 
 
 if __name__ == "__main__":
