@@ -6,7 +6,7 @@ from ECU_load import *
 from ECU_tkinter import *
 import gpiozero
 
-update_time = 100
+refresh = 250   # refresh screen every 250 ms
 
 
 # State machine to handle commands at each state...
@@ -19,11 +19,12 @@ class ECUState:
         self.pwm = 37
         self.n2_speed = 0
         self.state_time = 0
+        self.pfc_state = "OFF"
 
     def set_state(self, state):
-        self.state_time = 0
         self.state = state
         if state == "OFF":
+            self.state_time = 0
             self.igniter = "OFF"
             self.pumps = "OFF"
             res_load.reset_load()
@@ -52,6 +53,15 @@ class ECUState:
         else:
             print("fault!")
         return
+
+    def pfc_state_change(self, pfc_switch):
+        if pfc_switch == 1 and self.state == "RUNNING":
+            self.set_state("OFF")
+            self.pfc_state = "FAULT"
+        elif pfc_switch == 0:
+            self.pfc_state = "ON"
+
+
 
 
 # ecu state controller
@@ -87,6 +97,16 @@ def mode_pressed():
 mode_button = gpiozero.Button(16, pull_up=True)
 mode_button.when_pressed = mode_pressed
 
+
+def pfc_pressed():
+    ecu.pfc_state_change(pfc_button.value)
+    return
+
+
+pfc_button = gpiozero.Button(7, pull_up=True, hold_time=1)
+pfc_button.when_held = pfc_pressed
+pfc_button.when_released = pfc_pressed
+
 load_enc = gpiozero.RotaryEncoder(21, 20, max_steps=max_level)
 
 
@@ -111,7 +131,7 @@ class TestWindow(tk.Tk):
         status_column = 1
         self.pump_label = label_grid(self, status_column, 0, "Fuel Pump: " + ecu.pumps)
         self.igniter_label = label_grid(self, status_column, 1, "Igniter: " + ecu.igniter)
-        # self.occ_status = label_grid(self, 1, 2, "PFC Status: " + ecu_gpios.occ_status)
+        self.pfc_status = label_grid(self, status_column, 2, "PFC Status: " + ecu.pfc_state)
 
 
         # load bank
@@ -136,7 +156,7 @@ class TestWindow(tk.Tk):
         # self.n2_speed = label_grid(self, 2, 1, "N2 krpm: " + str(ecu.n2_speed))
 
         # screen refresh rate
-        self.lls.after(1000, self.update_state())
+        self.lls.after(refresh, self.update_state())
 
     def update_state(self):
         # function to run every xx seconds
@@ -148,17 +168,18 @@ class TestWindow(tk.Tk):
         elif ecu.state == "LIGHTOFF" and ecu.state_time == 5:
             ecu.set_state("IDLE")
 
-        elif ecu.state == "IDLE" and ecu.state_time == 5:
+        elif ecu.state == "IDLE" and ecu.state_time == 6:
             ecu.set_state("RUNNING")
 
         # update control state labels
         self.control_button.config(text=ecu.control_button_text)
         self.control_label.config(text=ecu.state)
-        self.control_time.config(text=ecu.state_time)
+        self.control_time.config(text=round(ecu.state_time, 1))
 
         # update output commands
         self.igniter_label.config(text="Igniter: " + ecu.igniter)
         self.pump_label.config(text="Fuel Pumps " + ecu.pumps)
+        self.pfc_status.config(text="PFC " + ecu.pfc_state)
 
         # update text for resistive load stage, kw, and labels
         if load_enc.steps < 0:
@@ -174,7 +195,7 @@ class TestWindow(tk.Tk):
             self.load_labels[ll].config(text=res_load.load_state[ll])
 
         # increment state time call update
-        ecu.state_time += 1
+        ecu.state_time += .25
         self.lls.after(1000, self.update_state)
 
 
