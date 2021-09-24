@@ -45,6 +45,7 @@ class ECUState:
 
         elif state == "IDLE":
             self.igniter = "OFF"
+            tw.igniter_label.config(bg="")
             self.pumps = "ON"
             self.control_button_text = "NA"
 
@@ -119,8 +120,10 @@ class PFCStatus:
     def state_text(self):
         if self.pfc_button.value == 0:
             text = "OFF"
+            tw.pfc_status.config(bg="")
         else:
             text = "ON"
+            tw.pfc_status.config(bg="green")
         return text
 
 
@@ -151,7 +154,7 @@ class TestWindow(tk.Tk):
 
         # system status's
         status_column = 1
-        self.eq_label = label_grid(self, control_column, 0, "Device Status")
+        self.eq_label = label_grid(self, status_column, 0, "Device Status")
         self.pump_label = label_grid(self, status_column, 1, "Fuel Pumps: " + ecu.pumps)
         self.igniter_label = label_grid(self, status_column, 2, "Igniter: " + ecu.igniter)
         self.pfc_status = label_grid(self, status_column, 3, "PFC Status: " + ecu.pfc_state)
