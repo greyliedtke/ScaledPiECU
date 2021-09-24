@@ -96,6 +96,9 @@ def mode_pressed():
     elif ecu.state == "RUNNING":
         ecu.set_state("OFF")
 
+    elif ecu.state == "FAULT":
+        ecu.set_state("OFF")
+
     else:
         print("ignored")
     return
@@ -113,7 +116,7 @@ class PFCStatus:
 
     def state_text(self):
         if self.pfc_button.value == 0:
-            text = "FAULT"
+            text = "OFF"
         else:
             text = "ON"
         return text
@@ -179,7 +182,7 @@ class TestWindow(tk.Tk):
         if ecu.state == "COUNTDOWN" and ecu.state_time == 3:
             ecu.set_state("LIGHTOFF")
 
-        elif ecu.state == "LIGHTOFF" and ecu.state_time == 8:
+        elif ecu.state == "LIGHTOFF" and ecu.state_time == 6:
             ecu.set_state("IDLE")
 
         elif ecu.state == "IDLE" and ecu.state_time == 10:
@@ -213,7 +216,7 @@ class TestWindow(tk.Tk):
 
         # increment state time call update
         ecu.state_time += .25
-        self.lls.after(1000, self.update_state)
+        self.lls.after(refresh, self.update_state)
 
 
 if __name__ == "__main__":
