@@ -87,7 +87,7 @@ def mode_pressed():
 mode_button = gpiozero.Button(16, pull_up=True)
 mode_button.when_pressed = mode_pressed
 
-load_enc = gpiozero.RotaryEncoder(20, 21)
+load_enc = gpiozero.RotaryEncoder(21, 20, max_steps=max_level)
 
 
 # testing window gui -----------------------------------------------------------
@@ -121,7 +121,7 @@ class TestWindow(tk.Tk):
         self.load_down_button = button_grid(self, load_column, 1, "Load Down", command=lambda: res_load.increment_load(inc=-1))
         self.lll = label_grid(self, load_column, 2, res_load.level)
         self.llkw = label_grid(self, load_column, 3, res_load.kw_level)
-        self.llenc = label_grid(self, load_column, 4, load_enc.value)
+        self.llenc = label_grid(self, load_column, 4, load_enc.steps)
 
         # display all loads
         load_column_2 = 3
@@ -161,9 +161,15 @@ class TestWindow(tk.Tk):
         self.pump_label.config(text="Fuel Pumps " + ecu.pumps)
 
         # update text for resistive load stage, kw, and labels
+        if load_enc.steps < 0:
+            load_enc.steps = 0
+
+        if res_load.level != load_enc.steps:
+            res_load.set_load(load_enc.steps)
+
         self.lll.config(text=res_load.level)
         self.llkw.config(text=res_load.kw_level)
-        self.llkw.config(text=load_enc.value)
+        self.llenc.config(text=load_enc.steps)
         for ll in range(len(self.load_labels)):
             self.load_labels[ll].config(text=res_load.load_state[ll])
 
