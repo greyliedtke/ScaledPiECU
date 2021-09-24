@@ -99,14 +99,8 @@ mode_button = gpiozero.Button(16, pull_up=True)
 mode_button.when_pressed = mode_pressed
 
 
-def pfc_pressed():
-    ecu.pfc_state_change(pfc_button.value)
-    return
-
-
 pfc_button = gpiozero.Button(7, pull_up=True, hold_time=1)
-pfc_button.when_held = pfc_pressed
-pfc_button.when_released = pfc_pressed
+
 
 load_enc = gpiozero.RotaryEncoder(21, 20, max_steps=max_level)
 
@@ -172,6 +166,9 @@ class TestWindow(tk.Tk):
         elif ecu.state == "IDLE" and ecu.state_time == 10:
             ecu.set_state("RUNNING")
 
+        elif ecu.state == "RUNNING" and pfc_button.value == 0:
+            ecu.set_state("FAULT")
+
         # update control state labels
         self.control_button.config(text=ecu.control_button_text)
         self.control_label.config(text=ecu.state)
@@ -180,7 +177,7 @@ class TestWindow(tk.Tk):
         # update output commands
         self.igniter_label.config(text="Igniter: " + ecu.igniter)
         self.pump_label.config(text="Fuel Pumps " + ecu.pumps)
-        self.pfc_status.config(text="PFC " + ecu.pfc_state)
+        self.pfc_status.config(text="PFC " + pfc_button.value)
 
         # update text for resistive load stage, kw, and labels
         if load_enc.steps < 0:
