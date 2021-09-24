@@ -4,6 +4,7 @@ import time
 from tkinter import *
 from ECU_load import *
 from ECU_tkinter import *
+import gpiozero
 
 update_time = 100
 
@@ -53,6 +54,10 @@ class ECUState:
         return
 
 
+# ecu state controller
+ecu = ECUState()
+
+
 # function to handle presses of control button
 def control_button():
     if ecu.state == "OFF":
@@ -66,6 +71,7 @@ def control_button():
     return
 
 
+# setting gpio buttons ---------------------------------------------
 def mode_pressed():
     if ecu.state == "OFF":
         ecu.set_state("COUNTDOWN")
@@ -78,11 +84,10 @@ def mode_pressed():
     return
 
 
-mode_button = Button(16, pull_up=True)
+mode_button = gpiozero.Button(16, pull_up=True)
 mode_button.when_pressed = mode_pressed
 
-# ecu state controller
-ecu = ECUState()
+load_enc = gpiozero.RotaryEncoder(20, 21)
 
 
 # testing window gui -----------------------------------------------------------
@@ -116,6 +121,7 @@ class TestWindow(tk.Tk):
         self.load_down_button = button_grid(self, load_column, 1, "Load Down", command=lambda: res_load.increment_load(inc=-1))
         self.lll = label_grid(self, load_column, 2, res_load.level)
         self.llkw = label_grid(self, load_column, 3, res_load.kw_level)
+        self.llenc = label_grid(self, load_column, 4, load_enc.value)
 
         # display all loads
         load_column_2 = 3
@@ -157,6 +163,7 @@ class TestWindow(tk.Tk):
         # update text for resistive load stage, kw, and labels
         self.lll.config(text=res_load.level)
         self.llkw.config(text=res_load.kw_level)
+        self.llkw.config(text=load_enc.value)
         for ll in range(len(self.load_labels)):
             self.load_labels[ll].config(text=res_load.load_state[ll])
 
