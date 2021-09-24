@@ -27,6 +27,7 @@ class ECUState:
             self.state_time = 0
             self.igniter = "OFF"
             self.pumps = "OFF"
+            tw.pump_label.config(bg="grey")
             load_enc.steps = 0
             self.control_button_text = "Begin Test"
 
@@ -45,7 +46,7 @@ class ECUState:
 
         elif state == "IDLE":
             self.igniter = "OFF"
-            tw.igniter_label.config(bg="")
+            tw.igniter_label.config(bg="grey")
             self.pumps = "ON"
             self.control_button_text = "NA"
 
@@ -120,7 +121,7 @@ class PFCStatus:
     def state_text(self):
         if self.pfc_button.value == 0:
             text = "OFF"
-            tw.pfc_status.config(bg="")
+            tw.pfc_status.config(bg="grey")
         else:
             text = "ON"
             tw.pfc_status.config(bg="green")
