@@ -66,6 +66,21 @@ def control_button():
     return
 
 
+def mode_pressed():
+    if ecu.state == "OFF":
+        ecu.set_state("COUNTDOWN")
+
+    elif ecu.state == "RUNNING":
+        ecu.set_state("OFF")
+
+    else:
+        print("ignored")
+    return
+
+
+mode_button = Button(16, pull_up=True)
+mode_button.when_pressed = mode_pressed
+
 # ecu state controller
 ecu = ECUState()
 
@@ -81,33 +96,38 @@ class TestWindow(tk.Tk):
         self.geometry('1000x500')
         self['bg'] = 'black'
 
-        # load bank
-        # add conditional statement for button presses only during test
-        self.load_up_button = button_grid(self, 3, 0, "Load Up", command=lambda: res_load.increment_load(inc=1))
-        self.load_down_button = button_grid(self, 3, 1, "Load Down", command=lambda: res_load.increment_load(inc=-1))
-        self.lll = label_grid(self, 3, 2, res_load.level)
-        self.llkw = label_grid(self, 3, 3, res_load.kw_level)
-
-        # display all loads
-        self.lls = label_grid(self, 4, 0, "Load States")
-        self.load_labels = []
-        for ll in range(7):
-            label = label_grid(self, 4, 1+ll, ll)
-            self.load_labels.append(label)
-
         # control buttons
-        self.control_button = button_grid(self, 0, 0, ecu.control_button_text, command=lambda: control_button())
-        self.control_label = label_grid(self, 0, 1, ecu.state)
-        self.control_time = label_grid(self, 0, 2, ecu.state_time)
+        control_column = 0
+        self.control_button = button_grid(self, control_column, 0, ecu.control_button_text, command=lambda: control_button())
+        self.control_label = label_grid(self, control_column, 1, ecu.state)
+        self.control_time = label_grid(self, control_column, 2, ecu.state_time)
 
         # system status's
-        self.pump_label = label_grid(self, 1, 0, "Fuel Pump: " + ecu.pumps)
-        self.igniter_label = label_grid(self, 1, 1, "Igniter: " + ecu.igniter)
+        status_column = 1
+        self.pump_label = label_grid(self, status_column, 0, "Fuel Pump: " + ecu.pumps)
+        self.igniter_label = label_grid(self, status_column, 1, "Igniter: " + ecu.igniter)
         # self.occ_status = label_grid(self, 1, 2, "PFC Status: " + ecu_gpios.occ_status)
 
+
+        # load bank
+        # add conditional statement for button presses only during test
+        load_column = 2
+        self.load_up_button = button_grid(self, load_column, 0, "Load Up", command=lambda: res_load.increment_load(inc=1))
+        self.load_down_button = button_grid(self, load_column, 1, "Load Down", command=lambda: res_load.increment_load(inc=-1))
+        self.lll = label_grid(self, load_column, 2, res_load.level)
+        self.llkw = label_grid(self, load_column, 3, res_load.kw_level)
+
+        # display all loads
+        load_column_2 = 3
+        self.lls = label_grid(self, load_column_2, 0, "Load States")
+        self.load_labels = []
+        for ll in range(7):
+            label = label_grid(self, load_column_2, 1 + ll, ll)
+            self.load_labels.append(label)
+
         # speed control
-        self.pwm_label = label_grid(self, 2, 0, "Speed %: " + str(ecu.pwm))
-        self.n2_speed = label_grid(self, 2, 1, "N2 krpm: " + str(ecu.n2_speed))
+        # self.pwm_label = label_grid(self, 2, 0, "Speed %: " + str(ecu.pwm))
+        # self.n2_speed = label_grid(self, 2, 1, "N2 krpm: " + str(ecu.n2_speed))
 
         # screen refresh rate
         self.lls.after(1000, self.update_state())

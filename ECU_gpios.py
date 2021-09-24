@@ -22,11 +22,7 @@ class GPIOState:
             b = "OCC Monitor"
 
 
-class GPIOStateFake:
-    def __init__(self):
-        self.occ_status = "Fault"
-
-
+# Load Relays -----------------------------------------------
 class LoadRelaysGPIO:
     def __init__(self):
         # initialize all relay outputs
@@ -50,6 +46,7 @@ class LoadRelaysGPIO:
 
 load_gpios = LoadRelaysGPIO()
 
-# ecu_gpios = GPIOState()
-ecu_gpios = GPIOStateFake()
+ecu_gpios = GPIOState()
+
+
 # end of script
