@@ -58,12 +58,10 @@ class ECUState:
         if pfc_switch == 1 and self.state == "RUNNING":
             self.set_state("OFF")
             self.pfc_state = "FAULT"
-        elif pfc_switch == 0:
+        elif pfc_switch == 1:
             self.pfc_state = "OFF"
         elif pfc_switch == 0:
             self.pfc_state = "ON"
-
-
 
 
 # ecu state controller
@@ -164,19 +162,19 @@ class TestWindow(tk.Tk):
         # function to run every xx seconds
 
         # check state and time to automatically trigger a state change
-        if ecu.state == "COUNTDOWN" and int(ecu.state_time) == 3:
+        if ecu.state == "COUNTDOWN" and ecu.state_time == 3:
             ecu.set_state("LIGHTOFF")
 
-        elif ecu.state == "LIGHTOFF" and int(ecu.state_time) == 5:
+        elif ecu.state == "LIGHTOFF" and ecu.state_time == 8:
             ecu.set_state("IDLE")
 
-        elif ecu.state == "IDLE" and int(ecu.state_time) == 6:
+        elif ecu.state == "IDLE" and ecu.state_time == 10:
             ecu.set_state("RUNNING")
 
         # update control state labels
         self.control_button.config(text=ecu.control_button_text)
         self.control_label.config(text=ecu.state)
-        self.control_time.config(text=round(ecu.state_time, 0))
+        self.control_time.config(text=round(ecu.state_time, 2))
 
         # update output commands
         self.igniter_label.config(text="Igniter: " + ecu.igniter)
