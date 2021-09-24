@@ -51,6 +51,12 @@ class ECUState:
             self.pumps = "ON"
             self.control_button_text = "OFF"
 
+        elif state == "FAULT":
+            self.igniter = "OFF"
+            self.pumps = "OFF"
+            self.control_button_text = "RESET"
+            res_load.reset_load()
+
         else:
             print("fault!")
         return
@@ -190,7 +196,7 @@ class TestWindow(tk.Tk):
         # update output commands
         self.igniter_label.config(text="Igniter: " + ecu.igniter)
         self.pump_label.config(text="Fuel Pumps " + ecu.pumps)
-        self.pfc_status.config(text="PFC " + pfc.text)
+        self.pfc_status.config(text="PFC " + pfc.state_text())
 
         # update text for resistive load stage, kw, and labels
         if load_enc.steps < 0:
