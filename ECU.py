@@ -27,7 +27,7 @@ class ECUState:
             self.state_time = 0
             self.igniter = "OFF"
             self.pumps = "OFF"
-            res_load.reset_load()
+            load_enc.steps = 0
             self.control_button_text = "Begin Test"
 
         elif state == "COUNTDOWN":
@@ -55,7 +55,7 @@ class ECUState:
             self.igniter = "OFF"
             self.pumps = "OFF"
             self.control_button_text = "RESET"
-            res_load.reset_load()
+            load_enc.steps = 0
 
         else:
             print("fault!")
