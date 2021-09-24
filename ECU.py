@@ -108,10 +108,10 @@ mode_button = gpiozero.Button(16, pull_up=True)
 mode_button.when_pressed = mode_pressed
 
 
+# pfc status
 class PFCStatus:
     def __init__(self):
         self.pfc_button = gpiozero.Button(7, pull_up=True, hold_time=1)
-        self.value = self.pfc_button.value
         self.text = "OFF"
 
     def state_text(self):
@@ -124,6 +124,8 @@ class PFCStatus:
 
 pfc = PFCStatus()
 
+
+# rotary encoder for load bank
 load_enc = gpiozero.RotaryEncoder(21, 20, max_steps=max_level)
 
 
@@ -188,13 +190,13 @@ class TestWindow(tk.Tk):
         elif ecu.state == "IDLE" and ecu.state_time == 10:
             ecu.set_state("RUNNING")
 
-        elif ecu.state == "RUNNING" and pfc.value == 0:
+        elif ecu.state == "RUNNING" and pfc.pfc_button.value == 0:
             ecu.set_state("FAULT")
 
         # update control state labels
         self.control_button.config(text=ecu.control_button_text)
         self.control_label.config(text=ecu.state)
-        self.control_time.config(text=round(ecu.state_time, 2))
+        self.control_time.config(text=round(ecu.state_time, 0))
 
         # update output commands
         self.igniter_label.config(text="Igniter: " + ecu.igniter)
