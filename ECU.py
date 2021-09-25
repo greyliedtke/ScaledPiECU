@@ -159,6 +159,11 @@ class TestWindow(tk.Tk):
         self.llenc = label_grid(self, load_column, 1, load_enc.steps)
         self.llkw = label_grid(self, load_column, 2, res_load.kw_level)
 
+        amp_column = 2
+        self.amp_label = label_grid(self, amp_column, 0, "Expected Currents")
+        self.a1 = label_grid(self, load_column, 1, str(res_load.amp_mat[res_load.level][0]))
+        self.a2 = label_grid(self, load_column, 2, str(res_load.amp_mat[res_load.level][1]))
+        self.a3 = label_grid(self, load_column, 3, str(res_load.amp_mat[res_load.level][2]))
 
         # display all loads
         # load_column_2 = 3
@@ -211,6 +216,9 @@ class TestWindow(tk.Tk):
         # self.lll.config(text=res_load.level)
         self.llkw.config(text=res_load.kw_level)
         self.llenc.config(text=load_enc.steps)
+        self.a1.config(text=str(res_load.amp_mat[res_load.level][0]))
+        self.a2.config(text=str(res_load.amp_mat[res_load.level][1]))
+        self.a3.config(text=str(res_load.amp_mat[res_load.level][2]))
         # for ll in range(len(self.load_labels)):
         #     self.load_labels[ll].config(text=res_load.load_state[ll])
 
