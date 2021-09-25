@@ -46,7 +46,7 @@ class ECUState:
 
         elif state == "IDLE":
             self.igniter = "OFF"
-            tw.igniter_label.config(bg="grey")
+            tw.igniter_label.config(bg="light grey")
             self.pumps = "ON"
             self.control_button_text = "NA"
 
@@ -79,17 +79,7 @@ class ECUState:
 ecu = ECUState()
 
 
-# function to handle presses of control button
-def control_button():
-    if ecu.state == "OFF":
-        ecu.set_state("COUNTDOWN")
-
-    elif ecu.state == "RUNNING":
-        ecu.set_state("OFF")
-
-    else:
-        print("ignored")
-    return
+#
 
 
 # setting gpio buttons ---------------------------------------------
@@ -121,10 +111,8 @@ class PFCStatus:
     def state_text(self):
         if self.pfc_button.value == 0:
             text = "OFF"
-            tw.pfc_status.config(bg="grey")
         else:
             text = "ON"
-            tw.pfc_status.config(bg="green")
         return text
 
 
