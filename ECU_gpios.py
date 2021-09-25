@@ -2,26 +2,6 @@
 from gpiozero import *
 
 
-class GPIOState:
-    def __init__(self):
-        self.occ_button = Button(3, pull_up=False)
-        self.re = RotaryEncoder(1, 2)
-        self.re.value = 0
-
-    def poll_states(self, state):
-        if state == "OFF":
-            b = "start button"
-
-        elif state == "LIGHTOFF":
-            b = None
-
-        elif state == "IDLE":
-            b = None
-
-        elif state == "RUNNING":
-            b = "OCC Monitor"
-
-
 # Load Relays -----------------------------------------------
 class LoadRelaysGPIO:
     def __init__(self):
@@ -45,8 +25,5 @@ class LoadRelaysGPIO:
 
 
 load_gpios = LoadRelaysGPIO()
-
-ecu_gpios = GPIOState()
-
 
 # end of script

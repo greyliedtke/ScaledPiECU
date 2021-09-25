@@ -63,6 +63,10 @@ class ResLoad:
         self.level = 0
         self.change_load()
 
+    def set_load(self, ll):
+        self.level = ll
+        self.change_load()
+
     def change_load(self):
         self.kw_level = str(round(self.level*1.44, 2)) + " KW"
         self.load_state = load_array[self.level]
