@@ -37,6 +37,37 @@ class PreTestWindow(tk.Tk):
         self.lls.after(1000, self.update_load_state)
 
 
+# button controls
+        # control buttons
+        # self.control_button = button_grid(self, control_column, 0, ecu.control_button_text, command=lambda: control_button())
+
+        # self.load_up_button = button_grid(self, load_column, 0, "Load Up",
+        #                                   command=lambda: res_load.increment_load(inc=1))
+        # self.load_down_button = button_grid(self, load_column, 1, "Load Down",
+        #                                     command=lambda: res_load.increment_load(inc=-1))
+        # self.lll = label_grid(self, load_column, 1, res_load.level)
+
+# load displays...
+        # display all loads
+        # load_column_2 = 3
+        # self.lls = label_grid(self, load_column_2, 0, "Load States")
+        # self.load_labels = []
+        # for ll in range(7):
+        #     label = label_grid(self, load_column_2, 1 + ll, ll)
+        #     self.load_labels.append(label)
+
+        # speed control
+        # self.pwm_label = label_grid(self, 2, 0, "Speed %: " + str(ecu.pwm))
+        # self.n2_speed = label_grid(self, 2, 1, "N2 krpm: " + str(ecu.n2_speed))
+
+
+        # update function
+        # self.control_button.config(text=ecu.control_button_text)
+
+        # for ll in range(len(self.load_labels)):
+        #     self.load_labels[ll].config(text=res_load.load_state[ll])
+
+
 # main menu
 class LoadControl(tk.Tk):
     def __init__(self):

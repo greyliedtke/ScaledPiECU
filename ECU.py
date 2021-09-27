@@ -79,9 +79,6 @@ class ECUState:
 ecu = ECUState()
 
 
-#
-
-
 # setting gpio buttons ---------------------------------------------
 def mode_pressed():
     if ecu.state == "OFF":
@@ -134,8 +131,6 @@ class TestWindow(tk.Tk):
         self.geometry('1000x500')
         self['bg'] = 'black'
 
-        # control buttons
-        # self.control_button = button_grid(self, control_column, 0, ecu.control_button_text, command=lambda: control_button())
         control_column = 0
         self.system_label = label_grid(self, control_column, 0, "System Status")
         self.control_label = label_grid(self, control_column, 1, ecu.state)
@@ -150,32 +145,15 @@ class TestWindow(tk.Tk):
 
         # load bank
         load_column = 2
-        # self.load_up_button = button_grid(self, load_column, 0, "Load Up",
-        #                                   command=lambda: res_load.increment_load(inc=1))
-        # self.load_down_button = button_grid(self, load_column, 1, "Load Down",
-        #                                     command=lambda: res_load.increment_load(inc=-1))
-        # self.lll = label_grid(self, load_column, 1, res_load.level)
         self.ll = label_grid(self, load_column, 0, "Load Bank")
         self.llenc = label_grid(self, load_column, 1, load_enc.steps)
         self.llkw = label_grid(self, load_column, 2, res_load.kw_level)
 
-        amp_column = 2
+        amp_column = 3
         self.amp_label = label_grid(self, amp_column, 0, "Expected Currents")
-        self.a1 = label_grid(self, load_column, 1, str(res_load.amp_mat[res_load.level][0]))
-        self.a2 = label_grid(self, load_column, 2, str(res_load.amp_mat[res_load.level][1]))
-        self.a3 = label_grid(self, load_column, 3, str(res_load.amp_mat[res_load.level][2]))
-
-        # display all loads
-        # load_column_2 = 3
-        # self.lls = label_grid(self, load_column_2, 0, "Load States")
-        # self.load_labels = []
-        # for ll in range(7):
-        #     label = label_grid(self, load_column_2, 1 + ll, ll)
-        #     self.load_labels.append(label)
-
-        # speed control
-        # self.pwm_label = label_grid(self, 2, 0, "Speed %: " + str(ecu.pwm))
-        # self.n2_speed = label_grid(self, 2, 1, "N2 krpm: " + str(ecu.n2_speed))
+        self.a1 = label_grid(self, amp_column, 1, str(res_load.amp_mat[res_load.level][0]))
+        self.a2 = label_grid(self, amp_column, 2, str(res_load.amp_mat[res_load.level][1]))
+        self.a3 = label_grid(self, amp_column, 3, str(res_load.amp_mat[res_load.level][2]))
 
         # screen refresh rate
         self.control_label.after(refresh, self.update_state())
@@ -197,7 +175,6 @@ class TestWindow(tk.Tk):
             ecu.set_state("FAULT")
 
         # update control state labels
-        # self.control_button.config(text=ecu.control_button_text)
         self.control_label.config(text=ecu.state)
         self.control_time.config(text=round(ecu.state_time, 0))
 
@@ -219,8 +196,6 @@ class TestWindow(tk.Tk):
         self.a1.config(text=str(res_load.amp_mat[res_load.level][0]))
         self.a2.config(text=str(res_load.amp_mat[res_load.level][1]))
         self.a3.config(text=str(res_load.amp_mat[res_load.level][2]))
-        # for ll in range(len(self.load_labels)):
-        #     self.load_labels[ll].config(text=res_load.load_state[ll])
 
         # increment state time call update
         ecu.state_time += .25
