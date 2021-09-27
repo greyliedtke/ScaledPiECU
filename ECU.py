@@ -26,7 +26,9 @@ class ECUState:
         if state == "OFF":
             self.state_time = 0
             self.igniter = "OFF"
+            ign.off()
             self.pumps = "OFF"
+            fps.off()
             tw.pump_label.config(bg="grey")
             load_enc.steps = 0
             self.control_button_text = "Begin Test"
@@ -39,13 +41,16 @@ class ECUState:
 
         elif state == "LIGHTOFF":
             self.igniter = "ON"
+            ign.on()
             tw.igniter_label.config(bg="green")
             tw.pump_label.config(bg="green")
             self.pumps = "ON"
+            fps.on()
             self.control_button_text = "NA"
 
         elif state == "IDLE":
             self.igniter = "OFF"
+            ign.off()
             tw.igniter_label.config(bg="light grey")
             self.pumps = "ON"
             self.control_button_text = "NA"
@@ -57,7 +62,9 @@ class ECUState:
 
         elif state == "FAULT":
             self.igniter = "OFF"
+            ign.off()
             self.pumps = "OFF"
+            fps.off()
             self.control_button_text = "RESET"
             load_enc.steps = 0
 
@@ -102,7 +109,7 @@ mode_button.when_pressed = mode_pressed
 # pfc status
 class PFCStatus:
     def __init__(self):
-        self.pfc_button = gpiozero.Button(7, pull_up=True, hold_time=1)
+        self.pfc_button = gpiozero.Button(7, pull_up=False, hold_time=1)
         self.text = "OFF"
 
     def state_text(self):

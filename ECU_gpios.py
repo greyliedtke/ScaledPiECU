@@ -26,4 +26,10 @@ class LoadRelaysGPIO:
 
 load_gpios = LoadRelaysGPIO()
 
+# Fuel and igniter digital outputs --------------------------
+fps = DigitalOutputDevice(23)
+fps.off()
+ign = DigitalOutputDevice(24)
+ign.off()
+
 # end of script
