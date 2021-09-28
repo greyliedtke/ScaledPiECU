@@ -179,7 +179,9 @@ class TestWindow(tk.Tk):
             ecu.set_state("RUNNING")
 
         elif ecu.state == "RUNNING" and pfc.pfc_button.value == 1:
-            ecu.set_state("FAULT")
+            time.sleep(1)
+            if pfc.pfc_button.value == 1:
+                ecu.set_state("FAULT")
 
         # update control state labels
         self.control_label.config(text=ecu.state)
