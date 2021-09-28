@@ -109,14 +109,14 @@ mode_button.when_pressed = mode_pressed
 # pfc status
 class PFCStatus:
     def __init__(self):
-        self.pfc_button = gpiozero.Button(2, pull_up=False, hold_time=1)
+        self.pfc_button = gpiozero.Button(4, pull_up=False, hold_time=1)
         self.text = "OFF"
 
     def state_text(self):
         if self.pfc_button.value == 0:
-            text = "OFF"
-        else:
             text = "ON"
+        else:
+            text = "OFF"
         return text
 
 
@@ -172,13 +172,13 @@ class TestWindow(tk.Tk):
         if ecu.state == "COUNTDOWN" and ecu.state_time == 3:
             ecu.set_state("LIGHTOFF")
 
-        elif ecu.state == "LIGHTOFF" and ecu.state_time == 6:
+        elif ecu.state == "LIGHTOFF" and ecu.state_time == 12:
             ecu.set_state("IDLE")
 
-        elif ecu.state == "IDLE" and ecu.state_time == 10:
+        elif ecu.state == "IDLE" and ecu.state_time == 15:
             ecu.set_state("RUNNING")
 
-        elif ecu.state == "RUNNING" and pfc.pfc_button.value == 0:
+        elif ecu.state == "RUNNING" and pfc.pfc_button.value == 1:
             ecu.set_state("FAULT")
 
         # update control state labels
