@@ -102,14 +102,14 @@ def mode_pressed():
     return
 
 
-mode_button = gpiozero.Button(16, pull_up=True)
+mode_button = gpiozero.Button(18, pull_up=True)
 mode_button.when_pressed = mode_pressed
 
 
 # pfc status
 class PFCStatus:
     def __init__(self):
-        self.pfc_button = gpiozero.Button(7, pull_up=False, hold_time=1)
+        self.pfc_button = gpiozero.Button(2, pull_up=False, hold_time=1)
         self.text = "OFF"
 
     def state_text(self):
@@ -124,7 +124,7 @@ pfc = PFCStatus()
 
 
 # rotary encoder for load bank
-load_enc = gpiozero.RotaryEncoder(21, 20, max_steps=max_level)
+load_enc = gpiozero.RotaryEncoder(17, 27, max_steps=max_level)
 
 
 # testing window gui -----------------------------------------------------------
