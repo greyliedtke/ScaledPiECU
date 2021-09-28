@@ -73,12 +73,12 @@ class ECUState:
         return
 
     def pfc_state_change(self, pfc_switch):
-        if pfc_switch == 0 and self.state == "RUNNING":
+        if pfc_switch == 1 and self.state == "RUNNING":
             self.set_state("OFF")
             self.pfc_state = "FAULT"
-        elif pfc_switch == 0:
-            self.pfc_state = "OFF"
         elif pfc_switch == 1:
+            self.pfc_state = "OFF"
+        elif pfc_switch == 0:
             self.pfc_state = "ON"
 
 
