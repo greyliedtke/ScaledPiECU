@@ -91,8 +91,9 @@ def mode_pressed():
     if ecu.state == "OFF":
         ecu.set_state("COUNTDOWN")
 
-    elif ecu.state == "RUNNING":
-        ecu.set_state("OFF")
+    # this was prone to noise during testing so commented out
+    # elif ecu.state == "RUNNING":
+    #     ecu.set_state("OFF")
 
     elif ecu.state == "FAULT":
         ecu.set_state("OFF")
