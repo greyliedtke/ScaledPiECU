@@ -110,11 +110,11 @@ class TestWindow(tk.Tk):
         self.ll_pwm = label_grid(self, load_column, 3, res_load.pwm_level)
 
         # amp column
-        amp_column = 3
-        self.amp_label = label_grid(self, amp_column, 0, "Expected Currents")
-        self.a1 = label_grid(self, amp_column, 1, str(res_load.amp_mat[res_load.level][0]))
-        self.a2 = label_grid(self, amp_column, 2, str(res_load.amp_mat[res_load.level][1]))
-        self.a3 = label_grid(self, amp_column, 3, str(res_load.amp_mat[res_load.level][2]))
+        # amp_column = 3
+        # self.amp_label = label_grid(self, amp_column, 0, "Expected Currents")
+        # self.a1 = label_grid(self, amp_column, 1, str(res_load.amp_mat[res_load.level][0]))
+        # self.a2 = label_grid(self, amp_column, 2, str(res_load.amp_mat[res_load.level][1]))
+        # self.a3 = label_grid(self, amp_column, 3, str(res_load.amp_mat[res_load.level][2]))
 
         # screen refresh rate
         self.control_label.after(refresh, self.update_state())
@@ -156,9 +156,9 @@ class TestWindow(tk.Tk):
         self.llkw.config(text=res_load.kw_level)
         self.llenc.config(text=load_enc.steps)
         self.ll_pwm.config(text=res_load.pwm_level)
-        self.a1.config(text=str(res_load.amp_mat[res_load.level][0]))
-        self.a2.config(text=str(res_load.amp_mat[res_load.level][1]))
-        self.a3.config(text=str(res_load.amp_mat[res_load.level][2]))
+        # self.a1.config(text=str(res_load.amp_mat[res_load.level][0]))
+        # self.a2.config(text=str(res_load.amp_mat[res_load.level][1]))
+        # self.a3.config(text=str(res_load.amp_mat[res_load.level][2]))
 
         # increment state time call update
         ecu.state_time += .25

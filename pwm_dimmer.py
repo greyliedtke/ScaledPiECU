@@ -45,8 +45,8 @@ load_array = [
 # rotary encoder for load bank
 load_enc = gpiozero.RotaryEncoder(17, 27, max_steps=max_encoder)
 
-# pwm pin
-pwm_pin = gpiozero.PWMOutputDevice(10, frequency=5000)
+# pwm pin. So far best results using ssr at lower frequency
+pwm_pin = gpiozero.PWMOutputDevice(10, frequency=200)
 
 
 # resistive load class
@@ -62,10 +62,10 @@ class ResLoad:
         if load_enc.value < 0:
             load_enc.value = 0
 
-        if load_enc.value != self.level:
-            self.level = load_enc.value
-            self.pwm_level = load_enc.value
-            pwm_pin.value = self.pwm_level/max_encoder
+        if self.level != load_enc.steps:
+            self.level = load_enc.steps
+            self.pwm_level = load_enc.value/max_encoder
+            pwm_pin.value = self.pwm_level
 
     def reset_load(self):
         self.level = 0
