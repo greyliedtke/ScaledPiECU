@@ -1,8 +1,6 @@
 import tkinter as tk
-import time
-import gpiozero
 from ECU_tkinter import *
-from pwm_dimmer import *
+from Reference.pwm_dimmer import *
 
 
 # system variables
