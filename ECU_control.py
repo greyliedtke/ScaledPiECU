@@ -23,44 +23,50 @@ class ControlLoop:
         self.pwm_level = 0
         self.currents = [0, 0, 0]
         self.encoder = None
+        self.ev = 0
 
     def set_control(self, mode):
         if mode == "PowerControl":
-            self.control_units = "Power Level"  # units encoder will control to
             self.control_mode = mode
+            self.control_state = ""
+            self.control_units = "Power Level"  # units encoder will control to
             self.encoder = gpiozero.RotaryEncoder(17, 27, max_steps=180)
 
         elif mode == "SpeedControl":
-            self.control_units = "KRPM"  # units encoder will control to
             self.control_mode = mode
+            self.control_state = ""
+            self.control_units = "KRPM"  # units encoder will control to
             self.encoder = gpiozero.RotaryEncoder(17, 27, max_steps=40)
 
         elif mode == "PassiveControl":
-            self.control_units = "Passive Ressistors"  # units encoder will control to
             self.control_mode = mode
+            self.control_state = ""
+            self.control_units = "# PR "  # units encoder will control to
             self.encoder = gpiozero.RotaryEncoder(17, 27, max_steps=12)
 
         else:
             print("Invalid control state selected")
 
     def control_loop(self):
+        # read n2 speed
+        self.n2 = read_n2_speed()
+
         # reset steps if less than 0
         if self.encoder.steps < 0:
             self.encoder.steps = 0
 
-        # read n2 speed
-        self.n2 = read_n2_speed()
+        self.ev = self.encoder.steps
 
         # ------------------------------------------- Control Modes ----------------------------------------------------
         # power control mode. Rotary encoder directly controls the load bank
         if self.control_mode == "PowerControl":
-            self.r_level = self.encoder.steps
+            self.r_level = self.ev
 
         # speed control mode. Load bank will modulate to this speed
         elif self.control_mode == "SpeedControl":
 
             # also set target speed here
-            self.target_n2 = self.encoder.steps
+            self.target_n2 = self.ev
 
             # set minimum speed for active control. Figure out delay or active safeties here...
             if self.n2 > 20:
@@ -77,7 +83,7 @@ class ControlLoop:
 
         # control mode to follow dynamics of passive power control
         elif self.control_mode == "PassiveControl":
-            power_calc = 0.00215 * self.encoder.steps * self.n2**2          # power at given speed
+            power_calc = 0.00215 * self.ev * self.n2**2          # power at given speed
             self.r_level = power_calc/1.44                                  # power back to resistive level
 
         # ------------------------------------------- Setting Values ---------------------------------------------------

@@ -111,8 +111,8 @@ class TestWindow(tk.Tk):
         # add mode control button?
         system_column = 0
         self.system_label = label_grid(self, system_column, 0, "System Status")
-        self.control_label = label_grid(self, system_column, 1, ecu.state)
-        self.control_time = label_grid(self, system_column, 2, ecu.state_time)
+        self.control_time = label_grid(self, system_column, 1, ecu.state_time)
+        # self.control_label = label_grid(self, system_column, 1, ecu.state)
 
         # system status's
         status_column = 1
@@ -128,7 +128,7 @@ class TestWindow(tk.Tk):
 
         # control column
         control_column = 3
-        self.control_mode = label_grid(self, control_column, 0, ecu_control.control_mode)
+        self.control_mode = label_grid(self, system_column, 0, ecu_control.control_mode)
         self.control_status = label_grid(self, control_column, 1, ecu_control.control_state)
         self.control_units = label_grid(self, control_column, 2, ecu_control.control_units)
         self.control_target = label_grid(self, control_column, 3, ecu_control.encoder.steps)
@@ -136,7 +136,7 @@ class TestWindow(tk.Tk):
         # load bank
         load_column = 4
         self.ll = label_grid(self, load_column, 0, "Load Bank")
-        self.ll_level = label_grid(self, load_column, 1, ecu_control.r_level)
+        self.r_level = label_grid(self, load_column, 1, ecu_control.r_level)
         self.ll_pwm = label_grid(self, load_column, 2, ecu_control.pwm_level)
         self.llkw = label_grid(self, load_column, 3, ecu_control.kw)
         self.amp_label = label_grid(self, load_column, 4, "Expected Currents")
@@ -186,7 +186,6 @@ class TestWindow(tk.Tk):
 
         # update control state labels
         self.system_label.config(text=ecu.state)
-        self.control_mode.config(text=ecu.control_mode)
         self.control_time.config(text=round(ecu.state_time, 0))
 
         # update output labels
@@ -197,10 +196,14 @@ class TestWindow(tk.Tk):
         # update speed
         self.n2_speed.config(text=str(ecu_control.n2))
 
+        # update control status values
+        self.control_status.config(text=ecu_control.control_state)
+        self.control_target.config(text=ecu_control.ev)
+
         # update text for resistive load stage, kw, and current labels
-        self.llkw.config(text="kw: "+ecu_control.kw)
-        self.ll_level.config(text="ll: "+ecu_control.r_level)
-        self.ll_pwm.config(text="pwm: "+ecu_control.pwm_level)
+        self.llkw.config(text="kw: " + str(ecu_control.kw))
+        self.r_level.config(text="ll: " + str(ecu_control.r_level))
+        self.ll_pwm.config(text="pwm: " + str(ecu_control.pwm_level))
         self.a1.config(text=str(ecu_control.currents[0]))
         self.a2.config(text=str(ecu_control.currents[1]))
         self.a3.config(text=str(ecu_control.currents[2]))
