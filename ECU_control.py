@@ -95,7 +95,6 @@ class ControlLoop:
 
 # control loop object
 ecu_control = ControlLoop()
-# set control mode
-ecu_control.set_control("PowerControl")
+
 
 # end of script

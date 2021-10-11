@@ -14,6 +14,11 @@ from ECU_control import *
 refresh_ms = 250
 refresh_s = refresh_ms/1000
 
+# set control mode
+ecu_control.set_control("PowerControl")
+# ecu_control.set_control("SpeedControl")
+# ecu_control.set_control("PassiveControl")
+
 
 # State machine to operate system at each state... ---------------------------------------------------------------------
 class ECUState:
@@ -128,7 +133,7 @@ class TestWindow(tk.Tk):
 
         # control column
         control_column = 3
-        self.control_mode = label_grid(self, system_column, 0, ecu_control.control_mode)
+        self.control_mode = label_grid(self, control_column, 0, ecu_control.control_mode)
         self.control_status = label_grid(self, control_column, 1, ecu_control.control_state)
         self.control_units = label_grid(self, control_column, 2, ecu_control.control_units)
         self.control_target = label_grid(self, control_column, 3, ecu_control.encoder.steps)
