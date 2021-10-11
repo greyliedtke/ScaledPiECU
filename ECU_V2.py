@@ -150,7 +150,7 @@ class TestWindow(tk.Tk):
         self.a3 = label_grid(self, load_column, 7, str(ecu_control.currents[2]))
 
         # screen refresh rate
-        self.control_label.after(refresh_ms, self.update_state())
+        self.system_label.after(refresh_ms, self.update_state())
 
     # function to run every xx seconds
     def update_state(self):
@@ -215,7 +215,7 @@ class TestWindow(tk.Tk):
 
         # increment state time and rerun function
         ecu.state_time += refresh_s
-        self.control_label.after(refresh_ms, self.update_state)
+        self.system_label.after(refresh_ms, self.update_state)
 
 
 # Initialize test window -----------------------------------------------------------------------------------------------
