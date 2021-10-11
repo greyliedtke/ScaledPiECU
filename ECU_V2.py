@@ -160,11 +160,11 @@ class TestWindow(tk.Tk):
             pfc_status = "OFF"
 
         # Begin lightoff if mode button is pressed and time is greater than 10 seconds
-        if ecu.state == "OFF" and mode_button.value == 0 and ecu.state_time > 10:
+        if ecu.state == "OFF" and mode_button.value == 1 and ecu.state_time > 10:
             ecu.set_state("COUNTDOWN")
 
         # Reset fault if mode button is pressed and time is greater than 10 seconds
-        if ecu.state == "FAULT" and mode_button.value == 0 and ecu.state_time > 10:
+        if ecu.state == "FAULT" and mode_button.value == 1 and ecu.state_time > 10:
             ecu.set_state("OFF")
 
         # check state and time to automatically trigger a state change
@@ -181,7 +181,7 @@ class TestWindow(tk.Tk):
         elif ecu.state == "RUNNING" and pfc_status == "OFF":
             time.sleep(1)
             # if still there for 1 second... turn system off
-            if pfc_button.value == 1:
+            if pfc_button.value == 0:
                 ecu.set_state("FAULT")
 
         # update control state labels
