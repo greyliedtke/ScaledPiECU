@@ -22,7 +22,7 @@ class ControlLoop:
         self.ssr_level = 0                      # level on ssr resistive load
         self.pwm_level = 0
         self.currents = [0, 0, 0]
-        self.encoder = gpiozero.RotaryEncoder(17, 27, max_steps=180)
+        self.encoder = None
 
     def set_control(self, mode):
         if mode == "PowerControl":

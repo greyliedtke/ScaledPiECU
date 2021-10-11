@@ -10,6 +10,7 @@ def load_interp(r_level):
     res_stage = int(ssr_lvl)                # round the number down to nearest integer
 
     pwm_level = ssr_lvl - res_stage         # set pwm signal as value in between stages.
+    pwm_level = round(pwm_level, 2)
     # correct for nonlinear dimmer!!!!
 
     kw_level = ssr_lvl*1.44                 # kw level rounded to nearest number
@@ -33,7 +34,7 @@ def current_multiple(stage, pwm_sig):
         cs = [phase3, phase3, phase3]           # otherwise, have all phases equal
 
     # current calculation
-    currents = [cs[0]*cf, cs[1]*cf, (cs[2] + pwm_sig)*cf]
+    currents = [cs[0]*cf, cs[1]*cf, round((cs[2] + pwm_sig)*cf, 0)]
     return currents
 
 

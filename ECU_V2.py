@@ -198,9 +198,9 @@ class TestWindow(tk.Tk):
         self.n2_speed.config(text=str(ecu_control.n2))
 
         # update text for resistive load stage, kw, and current labels
-        self.llkw.config(text=ecu_control.kw)
-        self.ll_level.config(text=ecu_control.r_level)
-        self.ll_pwm.config(text=ecu_control.pwm_level)
+        self.llkw.config(text="kw: "+ecu_control.kw)
+        self.ll_level.config(text="ll: "+ecu_control.r_level)
+        self.ll_pwm.config(text="pwm: "+ecu_control.pwm_level)
         self.a1.config(text=str(ecu_control.currents[0]))
         self.a2.config(text=str(ecu_control.currents[1]))
         self.a3.config(text=str(ecu_control.currents[2]))
