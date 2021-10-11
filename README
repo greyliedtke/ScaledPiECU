@@ -1,0 +1,42 @@
+File for v2 ECU Raspberry PI Controller
+
+General layout for system
+
+GUI
+Display System status
+Inverter Status
+Fuel Pump and Igniter commands
+N2 Speed
+Load Controller - Control Mode
+Load command - level, kw, amps
+
+
+# ------------------------------------------------------------------------------------------------------------
+Control Modes
+
+Passive mimic
+Follow P = .00215 * n * n2^2
+Solve for power to determine resitor array command
+value of n is set by rotary encoder or buttons
+
+Speed Control
+Use encoder to set target value for n2
+Adjust load to stabilize speed
+
+Power Control
+Use rotary encoder to set desired power level. This utilizes fine resolution of encoder and  dimmer
+
+
+# ------------------------------------------------------------------------------------------------------------
+Resistive Loads
+AC SSR commands set by lookup table corresponding to levels.
+
+Finer resolution determined by:
+
+PWM Approach
+select pwm level by finding value in between stage
+
+Lightbulb Load
+Utilize same logic as larger load bank... Need to use gpio breakout board
+
+
