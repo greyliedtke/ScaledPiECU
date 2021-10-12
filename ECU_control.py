@@ -16,6 +16,7 @@ class ControlLoop:
         self.control_state = "OFF"              # state of controlling
         self.control_units = "None"             # units encoder will control to
         self.n2 = 0                             # krpm
+        self.n2_v = 0                           # voltage
         self.target_n2 = 0                      # target n2 speed
         self.kw = 0                             # kw reading
         self.r_level = 0                        # resistive level
@@ -49,7 +50,7 @@ class ControlLoop:
 
     def control_loop(self):
         # read n2 speed
-        self.n2 = read_n2_speed()
+        self.n2, self.n2_v = read_n2_speed()
 
         # reset steps if less than 0
         if self.encoder.steps < 0:

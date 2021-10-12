@@ -130,6 +130,7 @@ class TestWindow(tk.Tk):
         n2_column = 2
         self.n2_label = label_grid(self, n2_column, 0, "N2 Speed (KRPM)")
         self.n2_speed = label_grid(self, n2_column, 1, str(ecu_control.n2))
+        self.n2_volts = label_grid(self, n2_column, 2, str(ecu_control.n2_v))
 
         # control column
         control_column = 3
@@ -200,6 +201,7 @@ class TestWindow(tk.Tk):
 
         # update speed
         self.n2_speed.config(text=str(ecu_control.n2))
+        self.n2_volts.config(text="V: " + str(ecu_control.n2_v))
 
         # update control status values
         self.control_status.config(text=ecu_control.control_state)
