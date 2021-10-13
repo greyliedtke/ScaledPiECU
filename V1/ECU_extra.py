@@ -9,7 +9,6 @@ def load_press(load_pin):
     load_state[load_pin] = 1 - load_state[load_pin]
 
 
-
 # pre-test window to test gpio stuff
 class PreTestWindow(tk.Tk):
     def __init__(self):
