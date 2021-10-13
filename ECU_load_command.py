@@ -79,7 +79,7 @@ load_gpios = LoadRelaysGPIO()
 #         # intialize pwm load control
 #         self.pwm_pin = PWMOutputDevice(10, frequency=200)
 
-load_pwm = PWMOutputDevice(10, frequency=200)
+load_pwm = PWMOutputDevice(12, frequency=200)
 
 
 # end

@@ -3,7 +3,7 @@ import gpiozero
 
 
 # PFC status -----------------------------------------------------------------------------------------------------------
-pfc_button = gpiozero.Button(4, pull_up=False, hold_time=1)
+pfc_button = gpiozero.Button(2, pull_up=False, hold_time=1)
 
 
 # Mode Button ----------------------------------------------------------------------------------------------------------

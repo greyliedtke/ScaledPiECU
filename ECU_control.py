@@ -24,7 +24,7 @@ class ControlLoop:
         self.pwm_level = 0
         self.currents = [0, 0, 0]
         self.encoder = None
-        self.ev = 0
+        self.ev = 0                             # encoder value (steps)
 
     def set_control(self, mode):
         if mode == "PowerControl":
@@ -56,6 +56,7 @@ class ControlLoop:
         if self.encoder.steps < 0:
             self.encoder.steps = 0
 
+        # read in encoder steps value
         self.ev = self.encoder.steps
 
         # ------------------------------------------- Control Modes ----------------------------------------------------
@@ -84,8 +85,8 @@ class ControlLoop:
 
         # control mode to follow dynamics of passive power control
         elif self.control_mode == "PassiveControl":
-            power_calc = 0.00215 * self.ev * self.n2**2          # power at given speed
-            self.r_level = power_calc/1.44                                  # power back to resistive level
+            power_calc = 0.00215 * self.ev * self.n2**2                         # power at given speed
+            self.r_level = power_calc/1.44                                      # power back to resistive level
 
         # ------------------------------------------- Setting Values ---------------------------------------------------
         # values for desired resistive level
