@@ -6,7 +6,7 @@ max_step = 180
 
 def load_interp(r_level):
 
-    ssr_lvl = r_level/10                       # divide the level by 10 for resolution
+    ssr_lvl = r_level/10                    # divide the level by 10 for resolution
     res_stage = int(ssr_lvl)                # round the number down to nearest integer
 
     pwm_level = ssr_lvl - res_stage         # set pwm signal as value in between stages.

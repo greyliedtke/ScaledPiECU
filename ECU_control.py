@@ -50,7 +50,9 @@ class ControlLoop:
 
     def control_loop(self):
         # read n2 speed
-        self.n2, self.n2_v = read_n2_speed()
+        n2.read_speed()
+        self.n2 = round(n2.krpm, 2)
+        self.n2_v = round(n2.volts, 2)
 
         # reset steps if less than 0
         if self.encoder.steps < 0:
