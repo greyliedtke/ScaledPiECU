@@ -73,22 +73,24 @@ class ControlLoop:
             self.target_n2 = self.ev
 
             # set minimum speed for active control. Figure out delay or active safeties here...
-            if self.n2 > 20:
+            if self.n2 > 15:
                 self.control_state = "ON"
+
+                # control speed by changing resistive level
+                # tap on the brakes if too fast by adding an r level
+                if self.n2 > self.target_n2:
+                    self.r_level += 1
+
+                elif self.n2 < (self.target_n2-2):
+                    self.r_level -= 1
+
             else:
                 self.control_state = "OFF"
 
-            # control speed by changing resistive level
-            if self.n2 > self.target_n2:
-                self.r_level += 1
-
-            elif self.n2 < self.target_n2 and self.control_state == "ON":
-                self.r_level += 1
-
         # control mode to follow dynamics of passive power control
         elif self.control_mode == "PassiveControl":
-            power_calc = 0.00215 * self.ev * self.n2**2                         # power at given speed
-            self.r_level = power_calc/1.44                                      # power back to resistive level
+            power_calc = 0.00215 * self.ev * self.n2**2                         # theoretical power at given speed
+            self.r_level = (power_calc/1.44) * 10                               # power level in steps
 
         # ------------------------------------------- Setting Values ---------------------------------------------------
         # values for desired resistive level

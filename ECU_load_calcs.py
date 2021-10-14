@@ -4,13 +4,15 @@ min_step = 0
 max_step = 180
 
 
+# calculate load setting for a given input. 10 represents a full resistor
 def load_interp(r_level):
 
     ssr_lvl = r_level/10                    # divide the level by 10 for resolution
-    res_stage = int(ssr_lvl)                # round the number down to nearest integer
+    res_stage = int(ssr_lvl)                # round the number down to nearest integer to set the resistive level
 
+    # calculate the remain percentage for sending a pwm signal
     pwm_level = ssr_lvl - res_stage         # set pwm signal as value in between stages.
-    pwm_level = round(pwm_level, 2)
+    pwm_level = round(pwm_level, 2)         # pwm value can be max 2 digits
     # correct for nonlinear dimmer!!!!
 
     kw_level = ssr_lvl*1.44                 # kw level rounded to nearest number
@@ -33,8 +35,10 @@ def current_multiple(stage, pwm_sig):
     else:
         cs = [phase3, phase3, phase3]           # otherwise, have all phases equal
 
-    # current calculation
-    currents = [cs[0]*cf, cs[1]*cf, round((cs[2] + pwm_sig)*cf, 0)]
+    # current calculation for the pwm signal current
+    partial_current = int(round((cs[2] + pwm_sig)*cf, 0))
+
+    currents = [cs[0]*cf, cs[1]*cf, partial_current]
     return currents
 
 
