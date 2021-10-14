@@ -142,7 +142,7 @@ class TestWindow(tk.Tk):
         # load bank
         load_column = 4
         self.ll = label_grid(self, load_column, 0, "Load Bank")
-        self.r_level = label_grid(self, load_column, 1, ecu_control.r_level)
+        self.ssr_level = label_grid(self, load_column, 1, ecu_control.ssr_level)
         self.ll_pwm = label_grid(self, load_column, 2, ecu_control.pwm_level)
         self.llkw = label_grid(self, load_column, 3, ecu_control.kw)
         self.amp_label = label_grid(self, load_column, 4, "Expected Currents")
@@ -209,7 +209,7 @@ class TestWindow(tk.Tk):
 
         # update text for resistive load stage, kw, and current labels
         self.llkw.config(text="kw: " + str(ecu_control.kw))
-        self.r_level.config(text="ll: " + str(ecu_control.r_level))
+        self.ssr_level.config(text="resitors" + str(ecu_control.r_level))
         self.ll_pwm.config(text="pwm: " + str(ecu_control.pwm_level))
         self.a1.config(text=str(ecu_control.currents[0]))
         self.a2.config(text=str(ecu_control.currents[1]))
