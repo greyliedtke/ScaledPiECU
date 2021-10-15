@@ -74,7 +74,7 @@ class LoadRelaysGPIO:
 
 load_gpios = LoadRelaysGPIO()
 
-
+# ----------------------------------------------------------------------------------------------------------------------
 # class PWMLoad:
 #     def __init__(self):
 #         # intialize pwm load control

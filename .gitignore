@@ -2,3 +2,4 @@
 __pycache*
 virtual_env*
 .idea*
+scratch.py

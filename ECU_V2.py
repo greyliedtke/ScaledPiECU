@@ -160,46 +160,46 @@ class TestWindow(tk.Tk):
 
     # function to run every xx seconds
     def update_state(self):
-
         # Check Status -------------------------------------------------------------------------------------------------
         # control loop
         ecu_control.control_loop()
 
-        # check pfc status
+        # check pfc status ---------------------------------------------------------------------------------------------
         if pfc_button.value == 1:
             pfc_status = "OFF"
+            if ecu.state == "RUNNING":
+                # if 4 values in a row are reading pfc as off...
+                if len(rl.pfc) > 10:
+                    if all(rl.pfc[-4:]) is True:
+                        ecu.set_state("FAULT")
         else:
             pfc_status = "ON"
 
+        # read mode button ---------------------------------------------------------------------------------------------
+        if mode_button.value == 1:
+            # Reset fault if mode button is pressed and time is greater than 10 seconds
+            if ecu.state == "FAULT" and ecu.state_time > 10:
+                ecu.set_state("OFF")
+
+            # Begin lightoff if mode button is pressed and time is greater than 10 seconds
+            elif ecu.state == "OFF" and ecu.state_time > 10:
+                ecu.set_state("COUNTDOWN")
+
+        # automatic state change based on time -------------------------------------------------------------------------
+        if ecu.state in ["COUNTDOWN", "LIGHTOFF", "IDLE"]:
+            # in countdown, set to lighttoff
+            if ecu.state_time == 3:
+                ecu.set_state("LIGHTOFF")
+            # in Lightoff, set to Idle
+            elif ecu.state_time == 12:
+                ecu.set_state("IDLE")
+            # in Idle, set to running
+            elif ecu.state_time == 15:
+                ecu.set_state("RUNNING")
+
         # Write to log -------------------------------------------------------------------------------------------------
-        if ecu.state != "OFF" or ecu.state != "FAULT":
+        if ecu.state not in ["OFF", "FAULT"]:
             rl.add(pfc_status, ecu_control.n2, ecu_control.r_level)
-
-        # Decision logic... Possible overhaul --------------------------------------------------------------------------
-        # Begin lightoff if mode button is pressed and time is greater than 10 seconds
-        if ecu.state == "OFF" and mode_button.value == 1 and ecu.state_time > 10:
-            ecu.set_state("COUNTDOWN")
-
-        # Reset fault if mode button is pressed and time is greater than 10 seconds
-        if ecu.state == "FAULT" and mode_button.value == 1 and ecu.state_time > 10:
-            ecu.set_state("OFF")
-
-        # check state and time to automatically trigger a state change
-        if ecu.state == "COUNTDOWN" and ecu.state_time == 3:
-            ecu.set_state("LIGHTOFF")
-
-        elif ecu.state == "LIGHTOFF" and ecu.state_time == 12:
-            ecu.set_state("IDLE")
-
-        elif ecu.state == "IDLE" and ecu.state_time == 15:
-            ecu.set_state("RUNNING")
-
-        # if engine is running and reads a pfc fault, ignore for 1 second
-        elif ecu.state == "RUNNING" and pfc_status == "OFF":
-            time.sleep(1)
-            # if still there for 1 second... turn system off
-            if pfc_button.value == 1:
-                ecu.set_state("FAULT")
 
         # Update Graphic -----------------------------------------------------------------------------------------------
         # update control state labels
@@ -227,7 +227,7 @@ class TestWindow(tk.Tk):
         self.a2.config(text=str(ecu_control.currents[1]))
         self.a3.config(text=str(ecu_control.currents[2]))
 
-        # increment state time and rerun function
+        # increment state time and rerun function ----------------------------------------------------------------------
         ecu.state_time += refresh_s
         self.system_label.after(refresh_ms, self.update_state)
 
