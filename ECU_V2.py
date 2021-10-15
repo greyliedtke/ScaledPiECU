@@ -9,6 +9,7 @@ import time
 from ECU_gpios import *
 from ECU_tkinter import *
 from ECU_control import *
+from ECU_logger import *
 
 # refresh screen every 250 ms
 refresh_ms = 250
@@ -55,6 +56,7 @@ class ECUState:
 
         # countdown mode. Initialize state time and change labels
         elif state == "COUNTDOWN":
+            rl.create_log()
             self.state_time = 0
             self.igniter = "OFF"
             self.pumps = "OFF"
@@ -90,6 +92,9 @@ class ECUState:
 
             self.control_button_text = "RESET"
             ecu_control.encoder.value = 0  # reset encoder steps to zero
+
+            # reset run log
+            rl.end_log()
 
         # Tried to change state to an invalid state...
         else:
@@ -156,6 +161,7 @@ class TestWindow(tk.Tk):
     # function to run every xx seconds
     def update_state(self):
 
+        # Check Status -------------------------------------------------------------------------------------------------
         # control loop
         ecu_control.control_loop()
 
@@ -165,6 +171,11 @@ class TestWindow(tk.Tk):
         else:
             pfc_status = "ON"
 
+        # Write to log -------------------------------------------------------------------------------------------------
+        if ecu.state != "OFF" or ecu.state != "FAULT":
+            rl.add(pfc_status, ecu_control.n2, ecu_control.r_level)
+
+        # Decision logic... Possible overhaul --------------------------------------------------------------------------
         # Begin lightoff if mode button is pressed and time is greater than 10 seconds
         if ecu.state == "OFF" and mode_button.value == 1 and ecu.state_time > 10:
             ecu.set_state("COUNTDOWN")
@@ -190,6 +201,7 @@ class TestWindow(tk.Tk):
             if pfc_button.value == 1:
                 ecu.set_state("FAULT")
 
+        # Update Graphic -----------------------------------------------------------------------------------------------
         # update control state labels
         self.system_label.config(text=ecu.state)
         self.control_time.config(text=round(ecu.state_time, 0))
@@ -209,7 +221,7 @@ class TestWindow(tk.Tk):
 
         # update text for resistive load stage, kw, and current labels
         self.llkw.config(text="kw: " + str(ecu_control.kw))
-        self.ssr_level.config(text="resitors" + str(ecu_control.r_level))
+        self.ssr_level.config(text="resitors: " + str(ecu_control.ssr_level))
         self.ll_pwm.config(text="pwm: " + str(ecu_control.pwm_level))
         self.a1.config(text=str(ecu_control.currents[0]))
         self.a2.config(text=str(ecu_control.currents[1]))

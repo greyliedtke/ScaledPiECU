@@ -2,6 +2,7 @@
 Manage load control of ecu
 """
 from gpiozero import *
+import smbus
 
 # Load bank GPIOS ------------------------------------------------------------------------------------------------------
 load_array = [
@@ -80,6 +81,50 @@ load_gpios = LoadRelaysGPIO()
 #         self.pwm_pin = PWMOutputDevice(10, frequency=200)
 
 load_pwm = PWMOutputDevice(12, frequency=200)
+
+
+# Small passive load on i2c bus ----------------------------------------------------------------------------------------
+class SmallLoad:
+    def __init__(self):
+        self.rm1 = 0x20
+        self.rm2 = 0x21
+        self.bus = smbus.SMBus(1)
+
+        # hex bank for controlling relays of 0 up to 8... We should only use max 5!!!
+        self.hex_bank = [0x0, 0x1, 0x3, 0x7, 0xf, 0x1f, 0x3f, 0x7f, 0xff]
+
+        # initialize load at 0
+        self.set_load(0)
+
+    def set_load(self, pwm_load):
+        # convert pwm signal to integer
+        small_load_int = int(pwm_load*10)
+
+        # if load is in between here. It is valid to turn on relays
+        if 0 < small_load_int < 10:
+            rm1l = small_load_int
+
+            # deciding which relay modules have how many on
+            if small_load_int > 5:
+                rm1l = 5
+                rm2l = small_load_int - 5
+            else:
+                rm2l = 0
+        else:
+            rm1l = 0
+            rm2l = 0
+
+        # convert it to hex
+        rm1b = self.hex_bank[rm1l]
+        rm2b = self.hex_bank[rm2l]
+
+        # send on the bus
+        self.bus.write_byte(self.rm1, rm1b)
+        self.bus.write_byte(self.rm2, rm2b)
+
+
+# initialzie small load object
+small_load = SmallLoad()
 
 
 # end
