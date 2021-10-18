@@ -126,7 +126,7 @@ class TestWindow(tk.Tk):
         self.eq_label = label_grid(self, status_column, 0, "Device Status")
         self.pump_label = label_grid(self, status_column, 1, "Fuel Pumps: " + ecu.pumps)
         self.igniter_label = label_grid(self, status_column, 2, "Igniter: " + ecu.igniter)
-        self.pfc_status = label_grid(self, status_column, 3, "PFC Status: " + ecu.pfc_state)
+        self.pfc_status = label_grid(self, status_column, 3, "PFC Status: ")
 
         # speed reading
         n2_column = 2
@@ -158,8 +158,12 @@ class TestWindow(tk.Tk):
     # function to run every xx seconds
     def update_state(self):
         # Check Status -------------------------------------------------------------------------------------------------
-        # control loop
-        ecu_control.control_loop()
+        # control loop. If an error is encountered, turn off test
+        try:
+            ecu_control.control_loop()
+        except:
+            print("control loop error!!!")
+            ecu.set_state("FAULT")
 
         # check pfc status ---------------------------------------------------------------------------------------------
         pfcb = pfc_button.value
@@ -194,6 +198,10 @@ class TestWindow(tk.Tk):
             # in Idle, set to running
             elif ecu.state_time == 15:
                 ecu.set_state("RUNNING")
+
+        if ecu.state in "RUNNING" and (ecu_control.n2 < 10 or ecu_control.n2 > 40):
+            ecu.set_state("FAULT")
+            print("speed detection shutdown")
 
         # Write to log -------------------------------------------------------------------------------------------------
         if ecu.state not in ["OFF", "FAULT"]:
