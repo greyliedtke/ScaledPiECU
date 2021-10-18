@@ -96,8 +96,8 @@ class ControlLoop:
         # values for desired resistive level
         self.ssr_level, self.pwm_level, self.kw, self.currents = load_interp(self.r_level)
         load_gpios.set_load(self.ssr_level)
-        small_load.set_load(self.pwm_level)
 
+        small_load.set_load(self.pwm_level)
         # load_pwm.value = self.pwm_level
 
 

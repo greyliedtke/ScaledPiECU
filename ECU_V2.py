@@ -30,10 +30,7 @@ class ECUState:
         self.igniter = "OFF"
         self.pumps = "OFF"
         self.control_button_text = "Begin Test"
-        # self.fuel_pwm = 37
-        # self.n2_speed = 0
         self.state_time = 0
-        self.pfc_state = "OFF"
 
     def set_state(self, state):
         # function to change the state of machine
@@ -165,7 +162,8 @@ class TestWindow(tk.Tk):
         ecu_control.control_loop()
 
         # check pfc status ---------------------------------------------------------------------------------------------
-        if pfc_button.value == 1:
+        pfcb = pfc_button.value
+        if pfcb == 1:
             pfc_status = "OFF"
             if ecu.state == "RUNNING":
                 # if 4 values in a row are reading pfc as off...
@@ -199,7 +197,7 @@ class TestWindow(tk.Tk):
 
         # Write to log -------------------------------------------------------------------------------------------------
         if ecu.state not in ["OFF", "FAULT"]:
-            rl.add(pfc_status, ecu_control.n2, ecu_control.r_level)
+            rl.add(pfcb, ecu_control.n2, ecu_control.r_level)
 
         # Update Graphic -----------------------------------------------------------------------------------------------
         # update control state labels

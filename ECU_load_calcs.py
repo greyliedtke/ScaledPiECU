@@ -7,6 +7,12 @@ max_step = 180
 # calculate load setting for a given input. 10 represents a full resistor
 def load_interp(r_level):
 
+    # setting the range of r_level if out of scale
+    if r_level < min_step:
+        r_level = min_step
+    elif r_level > max_step:
+        r_level = max_step
+
     ssr_lvl = r_level/10                    # divide the level by 10 for resolution
     res_stage = int(ssr_lvl)                # round the number down to nearest integer to set the resistive level
 
