@@ -74,13 +74,56 @@ class LoadRelaysGPIO:
 
 load_gpios = LoadRelaysGPIO()
 
-# ----------------------------------------------------------------------------------------------------------------------
-# class PWMLoad:
-#     def __init__(self):
-#         # intialize pwm load control
-#         self.pwm_pin = PWMOutputDevice(10, frequency=200)
 
-# load_pwm = PWMOutputDevice(12, frequency=200)
+# ----------------------------------------------------------------------------------------------------------------------
+# class hex bank:
+class BabyBank:
+    def __init__(self):
+        self.rm1 = 0x20
+        self.rm2 = 0x21
+        self.bus = smbus.SMBus(1)
+
+        # hex bank for controlling relays of 0 up to 9.5... We should only use max 5!!!
+        self.hex_bank = [
+            [0x0, 0x0],         # 0
+            [0x0, 0x1],         # 0.5
+            [0x0, 0x80],        # 1
+            [0x0, 0x81],        # 1.5
+            [0x0, 0xc0],        # 2
+            [0x0, 0xc1],        # 2.5
+            [0x0, 0xe0],        # 3
+            [0x0, 0xe1],        # 3.5
+            [0x0, 0xf0],        # 4
+            [0x0, 0xf1],        # 4.5
+            [0x80, 0xf0],        # 5
+            [0x80, 0xf1],        # 5.5
+            [0xc0, 0xf0],        # 6
+            [0xc0, 0xf1],        # 6.5
+            [0xe0, 0xf0],        # 7
+            [0xe0, 0xf1],        # 7.5
+            [0xf0, 0xf0],        # 8
+            [0xf0, 0xf1],        # 8.5
+            [0xf1, 0xf0],        # 9
+            [0xf1, 0xf1],        # 9.5
+        ]
+
+        # initialize load at 0
+        self.set_load(0)
+
+    def set_load(self, partial_load):
+        # convert pwm signal to integer
+        partial_load_int = int(partial_load*20)
+
+        # if load is in between here, turn on relays
+        # It is valid to turn on relays
+        if 0 <= partial_load_int < 20:
+            rcm = self.hex_bank[partial_load_int]
+            # send on the bus
+            self.bus.write_byte(self.rm1, rcm[0])
+            self.bus.write_byte(self.rm2, rcm[1])
+
+        else:
+            print("invalid load assignment")
 
 
 # Small passive load on i2c bus ----------------------------------------------------------------------------------------
@@ -123,8 +166,8 @@ class SmallLoad:
         self.bus.write_byte(self.rm2, rm2b)
 
 
-# initialzie small load object
-small_load = SmallLoad()
+# initialize small load object
+small_load = BabyBank()
 
 
 # end

@@ -31,7 +31,7 @@ class ControlLoop:
             self.control_mode = mode
             self.control_state = ""
             self.control_units = "Power Level"  # units encoder will control to
-            self.encoder = gpiozero.RotaryEncoder(17, 27, max_steps=180)
+            self.encoder = gpiozero.RotaryEncoder(17, 27, max_steps=360)
 
         elif mode == "SpeedControl":
             self.control_mode = mode
