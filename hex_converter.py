@@ -85,11 +85,34 @@ bank_020 = [
     [0xf1, 0xf1],        # 9.5
 ]
 
+magic_array = [
+    "00000000",
+    "00000100",
+    "00100000",
+    "00100100",
+    "00110000",
+    "00110100",
+    "10000000",
+    "10000100",
+    "10100000",
+    "10100100",
+    "10110000",
+    "10110100",
+    "11000000",
+    "11000100",
+    "11100000",
+    "11100100",
+    "11110000",
+    "11110100",
+    "11111000",
+    "11111100",
+]
+
 
 # function to write array
 def load_array(level):
     # send commands to gpio 0-7 from given level... number of relays on
-    bin_rep = bb[level]            # binary representation
+    bin_rep = magic_array[level]            # binary representation
     dec_rep = int(bin_rep, 2)               # decimal representation
     hex_rep = hex(dec_rep)                  # hex representation
     # print(bin_rep, dec_rep, hex_rep)
@@ -97,7 +120,7 @@ def load_array(level):
 
 
 # loop through testing values
-for load in range(6):
+for load in range(20):
     load_array(load)
 
 
